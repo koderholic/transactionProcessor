@@ -11,14 +11,15 @@ import (
 )
 
 /*
-1 Listen for Changes
-2 Read File Content
-3 Create Array with Content
-4 Identify content to be removed
-    4.1 Create new Unique file
-5 Remove content from array
-6 convert array back to string
-7 save file
+1 Listen for (create and write)Changes on a specific file(*.summary) in the input directory
+2 Once they is a change, Read current content of the File
+3 Create a slice with the Content
+4 Identify specific transaction data in the content slice to be removed
+	4.1 Create new Unique file
+	4.2 Move each identified transaction data into the unique file
+5 Remove identified transaction data from content slice, creating a new slice
+6 convert new slice back to string
+7 save new slice back to the watched file in the input directory
 
 TODO :
 1. Build for multiple platform
