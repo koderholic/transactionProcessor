@@ -71,7 +71,7 @@ func startProcess(inDir, outDir, backupDir string) {
 					fileSlice := fileToSlice(event.Name)
 
 					for _, content := range fileSlice {
-						if !strings.Contains(content, "STERLING BANK PLC") {
+						if !strings.Contains(content, "transactionToLookOutFor") {
 							newFileSlice = append(newFileSlice, content)
 							continue
 						}
