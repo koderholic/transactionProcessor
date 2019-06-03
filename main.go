@@ -3,25 +3,21 @@ package main
 import (
 	"flag"
 	"fmt"
-	"os"
 )
 
 func main() {
-	var in, out, b string
 
-	flag.StringVar(&out, "out", ".", "Output Directory of transactions '.unique' files")
-	flag.StringVar(&in, "in", ".", "Input Directory of transactions '.summary' files")
-	flag.StringVar(&b, "b", "", "Backup Directory of transactions '.summary' files")
+	var loadConfig string
+
+	flag.StringVar(&loadConfig, "config", ".", "directory location of config file")
 	flag.Parse()
 
-	if in == "" && out == "" {
+	if loadConfig == "" {
 		fmt.Printf("----------------------------------------------------------\n")
 		flag.Usage()
 		fmt.Printf("----------------------------------------------------------\n")
-
-		os.Exit(0)
 	}
 
-	initializeConf()
-	startProcess(in, out, b)
+	initializeConf(loadConfig)
+	startProcess()
 }

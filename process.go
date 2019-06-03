@@ -26,9 +26,11 @@ TODO :
 4. Write test
 */
 
-func startProcess(inDir, outDir, backupDir string) {
+func startProcess() {
+	var inDir, outDir, backupDir string = config.InDir, config.OutDir, config.BackupDir
 	if _, err := os.Stat(inDir); os.IsNotExist(err) {
 		fmt.Println("Input directory does not exists")
+		logToFile("Input directory does not exists \n")
 		return
 	}
 
@@ -40,6 +42,7 @@ func startProcess(inDir, outDir, backupDir string) {
 	if backupDir != "" {
 		if _, err := os.Stat(backupDir); os.IsNotExist(err) {
 			fmt.Println("Backup directory does not exists")
+			logToFile("Backup directory does not exists \n")
 			return
 		}
 	}
@@ -48,6 +51,7 @@ func startProcess(inDir, outDir, backupDir string) {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		fmt.Println("ERROR", err)
+		logToFile(fmt.Sprintf("\n\nERROR : %s \n", err))
 	}
 	defer watcher.Close()
 
@@ -59,8 +63,9 @@ func startProcess(inDir, outDir, backupDir string) {
 			day   time.Weekday
 			count int
 		}
+		fileNameCounter := fileNamer{time.Now().Weekday(), 0}
+
 		for {
-			fileNameCounter := fileNamer{time.Now().Weekday(), 0}
 			select {
 			case <-tick:
 				for name, event := range eventMap {
@@ -81,6 +86,7 @@ func startProcess(inDir, outDir, backupDir string) {
 						//Proces New Transaction to a New File
 						sliceToFile(transactionLine, outDir+string(os.PathSeparator)+fileName)
 						println("Created Unique Transaction File: ", fileName)
+						logToFile(fmt.Sprintf("\n\nCreated Unique Transaction File: %s \n", fileName))
 
 						if backupDir != "" {
 							backupToFile(fmt.Sprintf("%s\n\n", content), fmt.Sprintf("%s%sbackup_%v.txt", backupDir, string(os.PathSeparator), time.Now().Format("20060102")))
@@ -111,6 +117,7 @@ func startProcess(inDir, outDir, backupDir string) {
 			// watch for errors
 			case err := <-watcher.Errors:
 				fmt.Println("ERROR:", err)
+				logToFile(fmt.Sprintf("\n\nERROR: %s \n", err))
 
 			}
 		}
@@ -118,12 +125,14 @@ func startProcess(inDir, outDir, backupDir string) {
 
 	if err := watcher.Add(inDir); err != nil {
 		fmt.Println("FATAL ERROR:", err)
+		logToFile(fmt.Sprintf("\n\nFATAL ERROR: %s \n", err))
 		os.Exit(0)
 	}
 
 	//This section exits the process
 	var exit string
-	fmt.Print("Type 'exit' and press 'Enter' to stop process...")
+	fmt.Print("\n Type 'exit' and press 'Enter' to stop process...")
+	logToFile(fmt.Sprintf("\n Type 'exit' and press 'Enter' to stop process... \n"))
 	for {
 		if fmt.Scanln(&exit); exit == "exit" {
 			os.Exit(0)
@@ -153,11 +162,14 @@ func backupToFile(transactionLine string, fileName string) {
 	file, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		println("ERROR", err.Error())
+		logToFile(fmt.Sprintf("\n\nERROR: %s \n", err.Error()))
 	}
 	if _, err := file.Write([]byte(transactionLine)); err != nil {
 		println("ERROR", err.Error())
+		logToFile(fmt.Sprintf("\n\nERROR: %s \n", err.Error()))
 	}
 	if err := file.Close(); err != nil {
 		println("ERROR", err.Error())
+		logToFile(fmt.Sprintf("\n\nERROR: %s \n", err.Error()))
 	}
 }

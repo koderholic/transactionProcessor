@@ -1,2 +1,6 @@
-suffix: .fileExtension
+inDir: The input directory to watch
+outDir: The output directory for unique files
+backupDir: The backup directory to write to
+logDir: The backup directory to write to
+suffix: fileExtension
 keyword: The keyword to look out for
