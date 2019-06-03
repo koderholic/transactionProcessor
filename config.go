@@ -40,5 +40,5 @@ func (c *conf) getConf() {
 }
 
 func initializeConf() {
-	config.getConf()
+	go config.getConf()
 }
