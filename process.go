@@ -22,9 +22,7 @@ import (
 7 save new slice back to the watched file in the input directory
 
 TODO :
-1. Build for multiple platform
 2. Run task scheduler on windows
-3. Add config file for double click to start with viper package
 4. Write test
 */
 
@@ -72,20 +70,20 @@ func startProcess(inDir, outDir, backupDir string) {
 					fileSlice := fileToSlice(event.Name)
 
 					for _, content := range fileSlice {
-						if !strings.Contains(content, "transactionToLookOutFor") {
+						if !strings.Contains(content, config.Keyword) {
 							newFileSlice = append(newFileSlice, content)
 							continue
 						}
 						println("Found Transaction:", content[:64])
-
-						transactionLine := strings.Split(content, "\n")
+						transactionLine := strings.Split(content[32:], "\n")
 						fileName := fmt.Sprintf("STLB_Transact_%v_%v_%v.txt", time.Now().Format("20060102"), time.Now().Format("150405"), fileNameCounter.count)
 
+						//Proces New Transaction to a New File
 						sliceToFile(transactionLine, outDir+string(os.PathSeparator)+fileName)
 						println("Created Unique Transaction File: ", fileName)
 
 						if backupDir != "" {
-							backupToFile(content, fmt.Sprintf("%s%sbackup_%v.txt", backupDir, string(os.PathSeparator), time.Now().Format("20060102")))
+							backupToFile(fmt.Sprintf("%s\n\n", content), fmt.Sprintf("%s%sbackup_%v.txt", backupDir, string(os.PathSeparator), time.Now().Format("20060102")))
 						}
 
 						if today := &fileNameCounter; today.day == time.Now().Weekday() {
@@ -94,7 +92,6 @@ func startProcess(inDir, outDir, backupDir string) {
 							today.day = time.Now().Weekday()
 							today.count = 0
 						}
-						//Proces New Transaction to a New File
 					}
 
 					sliceToFile(newFileSlice, event.Name)
@@ -103,7 +100,7 @@ func startProcess(inDir, outDir, backupDir string) {
 
 			// watch for events
 			case event := <-watcher.Events:
-				if strings.Contains(event.Name, "summary") {
+				if strings.HasSuffix(event.Name, config.Suffix) {
 					switch {
 					case event.Op&fsnotify.Write == fsnotify.Write,
 						event.Op&fsnotify.Create == fsnotify.Create:

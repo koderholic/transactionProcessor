@@ -22,5 +22,6 @@ func main() {
 		os.Exit(0)
 	}
 
+	initializeConf()
 	startProcess(in, out, b)
 }
