@@ -22,7 +22,6 @@ import (
 7 save new slice back to the watched file in the input directory
 
 TODO :
-2. Run task scheduler on windows
 4. Write test
 */
 
