@@ -31,7 +31,7 @@ func (c *conf) getConf() {
 		fmt.Println("Config file changed:", e.Name)
 		err := viper.ReadInConfig()
 		if err != nil {
-			panic(fmt.Errorf("\n fatal error: could not read from config file >>%s ", err))
+			fmt.Printf("\n fatal error: could not read from config file >>%s ", err)
 		}
 		viper.Unmarshal(c)
 	})
@@ -40,5 +40,5 @@ func (c *conf) getConf() {
 }
 
 func initializeConf() {
-	go config.getConf()
+	config.getConf()
 }
