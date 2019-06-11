@@ -53,9 +53,9 @@ func (c *conf) init(configDir string) {
 	viper.SetDefault("outDir", dir)
 	viper.SetDefault("backupDir", "")
 	viper.SetDefault("logDir", dir)
-	viper.SetDefault("suffix", ".summary")
-	viper.SetDefault("keyword", "48=")
-	viper.SetDefault("trimerIndex", "8=FIX.4.4")
+	viper.SetDefault("suffix", "")
+	viper.SetDefault("keyword", "")
+	viper.SetDefault("trimerIndex", "")
 	viper.WatchConfig()
 
 	err := viper.ReadInConfig()

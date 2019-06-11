@@ -4,3 +4,4 @@ backupDir: The backup directory to write to
 logDir: The backup directory to write to
 suffix: fileExtension
 keyword: The keyword to look out for
+trimerIndex: This is optional
