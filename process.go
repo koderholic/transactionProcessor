@@ -78,8 +78,9 @@ func startProcess() {
 							newFileSlice = append(newFileSlice, content)
 							continue
 						}
-						println("Found Transaction:", content[:64])
-						transactionLine := strings.Split(content[32:], "\n")
+						println("Found Transaction:", content[:len(content)/5])
+						trimmerIndex := strings.Index(content, config.TrimerIndex)
+						transactionLine := strings.Split(content[trimmerIndex:], "\n")
 						fileName := fmt.Sprintf("STLB_Transact_%v_%v_%v.txt", time.Now().Format("20060102"), time.Now().Format("150405"), fileNameCounter.count)
 
 						//Proces New Transaction to a New File

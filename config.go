@@ -10,12 +10,13 @@ import (
 )
 
 type conf struct {
-	InDir     string `yaml:"inDir"`
-	OutDir    string `yaml:"outDir"`
-	BackupDir string `yaml:"backupDir"`
-	LogDir    string `yaml:"logDir"`
-	Suffix    string `yaml:"suffix"`
-	Keyword   string `yaml:"keyword"`
+	InDir       string `yaml:"inDir"`
+	OutDir      string `yaml:"outDir"`
+	BackupDir   string `yaml:"backupDir"`
+	LogDir      string `yaml:"logDir"`
+	Suffix      string `yaml:"suffix"`
+	Keyword     string `yaml:"keyword"`
+	TrimerIndex string `yaml:"trimerIndex"`
 }
 
 var config conf
@@ -54,6 +55,7 @@ func (c *conf) init(configDir string) {
 	viper.SetDefault("logDir", dir)
 	viper.SetDefault("suffix", ".summary")
 	viper.SetDefault("keyword", "48=")
+	viper.SetDefault("trimerIndex", "8=FIX.4.4")
 	viper.WatchConfig()
 
 	err := viper.ReadInConfig()
